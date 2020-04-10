@@ -1,0 +1,35 @@
+name: 'transifex-action'
+description: 'Push Transifex sources and pull translations'
+author: 'plfiorini'
+
+runs:
+  using: 'docker'
+  image: 'docker://liridev/transifex-action'
+
+inputs:
+  push_sources:
+    description: 'Pushes source locales to Transifex'
+    required: false
+    default: 'true'
+  pull_translations:
+    description: 'Pulls Translations to Transifex'
+    default: 'false'
+    required: false
+  minimum_perc:
+    description: 'Minimum percentage the files need to be translated to be fetched'
+    default: '5'
+    required: false
+  translations_folder:
+    description: 'The wildcard-able expression for the folder containing the locales. Eg /config/locales'
+    required: false
+  committer_email:
+    description: 'The email of the author of commit'
+    default: 'git-action@transifex.com'
+    required: false
+  committer_name:
+    default: 'Transifex Github action'
+    description: 'The email of the author of commit'
+    required: false
+  ssh_key:
+    description: 'SSH key to use for commit'
+    required: false
