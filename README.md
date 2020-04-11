@@ -23,6 +23,7 @@ jobs:
         uses: liri-infra/lupdate-action@master
       - name: Push sources and pull translations
         uses: liri-infra/transifex-action@master
+        with:
             tx_token: ${{ secrets.TX_TOKEN }}
             ssh_key: ${{ secrets.CI_SSH_KEY }}
             push_sources: true
