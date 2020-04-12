@@ -27,6 +27,10 @@ def main():
     if minimum_perc > 0:
         args.append(f'--minimum-perc={minimum_perc}')
 
+    # Set TX_TOKEN
+    if tx_token:
+        os.environ['TX_TOKEN'] = tx_token
+
     # Save ssh key
     ssh_tempfile = ''
     if ssh_key:
