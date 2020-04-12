@@ -10,4 +10,6 @@ RUN set -ex && \
 
 ADD entrypoint /entrypoint
 
+ENV PYTHONUNBUFFERED=1
+
 ENTRYPOINT ["/entrypoint"]
