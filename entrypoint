@@ -10,6 +10,11 @@ import subprocess
 import tempfile
 
 
+def run(args):
+    print('+ ' + ' '.join(args))
+    return subprocess.check_output(args)
+
+
 def main():
     tx_token = os.environ.get('INPUT_TX_TOKEN') or os.environ.get('TX_TOKEN')
     ssh_key = os.environ['INPUT_SSH_KEY']
@@ -47,28 +52,28 @@ def main():
 
     # Git checkout action does a shallow clone. That prevents us to
     # access common history of branches
-    subprocess.check_output(['git', 'fetch', '--unshallow'])
+    run(['git', 'fetch', '--unshallow'])
 
     # Discard changes
-    subprocess.check_output(['git', 'stash'])
+    run(['git', 'stash'])
 
     # Push and pull
     if pull_translations:
         pull_args = ['tx', 'pull', '--no-interactive', '--force', '--all']
-        subprocess.check_output(pull_args + args)
+        run(pull_args + args)
     if push_sources:
-        subprocess.check_output(['tx', 'push', '--no-interactive', '--source'])
+        run(['tx', 'push', '--no-interactive', '--source'])
 
     # Add files
     paths = glob.glob(translations_folder, recursive=True)
     for path in paths:
-        subprocess.check_output(['git', 'add', path])
+        run(['git', 'add', path])
 
     # Commit
     os.environ['GIT_SSH_COMMAND'] = f'ssh -i {ssh_tempfile} -o StrictHostKeyChecking=no'
     msg = 'Automatic merge of Transifex translations\n\n[ci skip]'
-    subprocess.check_output(['git', 'commit', '--message=' + msg])
-    subprocess.check_output(['git', 'push'])
+    run(['git', 'commit', '--message=' + msg])
+    run(['git', 'push'])
 
 
 if __name__ == '__main__':
