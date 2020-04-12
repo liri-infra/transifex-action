@@ -16,6 +16,7 @@ def run(args):
 
 
 def main():
+    github_repository = os.environ['GITHUB_REPOSITORY']
     tx_token = os.environ.get('INPUT_TX_TOKEN') or os.environ.get('TX_TOKEN')
     ssh_key = os.environ['INPUT_SSH_KEY']
     translations_folder = os.environ['INPUT_TRANSLATIONS_FOLDER']
@@ -72,6 +73,7 @@ def main():
     # Commit
     if ssh_tempfile:
         os.environ['GIT_SSH_COMMAND'] = f'ssh -i {ssh_tempfile} -o StrictHostKeyChecking=no'
+        run(['git', 'remote', 'set-url', '--push', 'origin', f'git@github.com:{github_repository}'])
     msg = 'Automatic merge of Transifex translations\n\n[ci skip]'
     run(['git', 'commit', '--message=' + msg])
     run(['git', 'push'])
