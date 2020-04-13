@@ -6,7 +6,7 @@ LABEL "maintainer"="Pier Luigi Fiorini <pierluigi.fiorini@liri.io>"
 
 RUN set -ex && \
     pip install transifex-client && \
-    apk add git
+    apk add git openssh-client
 
 ADD entrypoint /entrypoint
 
