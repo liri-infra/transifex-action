@@ -55,9 +55,6 @@ def main():
     # access common history of branches
     run(['git', 'fetch', '--unshallow'])
 
-    # Discard changes
-    run(['git', 'stash'])
-
     # Push and pull
     if pull_translations:
         pull_args = ['tx', 'pull', '--no-interactive', '--force', '--all']
