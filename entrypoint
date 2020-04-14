@@ -18,12 +18,12 @@ def run(args):
 def main():
     github_repository = os.environ['GITHUB_REPOSITORY']
     tx_token = os.environ.get('INPUT_TX_TOKEN') or os.environ.get('TX_TOKEN')
-    ssh_key = os.environ['INPUT_SSH_KEY']
-    translations_folder = os.environ['INPUT_TRANSLATIONS_FOLDER']
+    ssh_key = os.environ.get('INPUT_SSH_KEY')
+    translations_folder = os.environ.get('INPUT_TRANSLATIONS_FOLDER')
     committer_email = os.environ.get('INPUT_COMMITTER_EMAIL', 'git-action@transifex.com')
     committer_name = os.environ.get('INPUT_COMMITTER_NAME', 'Transifex Github action')
-    pull_translations = os.environ['INPUT_PULL_TRANSLATIONS'] == 'true'
-    push_sources = os.environ['INPUT_PUSH_SOURCES'] == 'true'
+    pull_translations = os.environ.get('INPUT_PULL_TRANSLATIONS', 'false') == 'true'
+    push_sources = os.environ.get('INPUT_PUSH_SOURCES', 'false') == 'true'
     try:
         minimum_perc = int(os.environ.get('INPUT_MINIMUM_PERC', '0'))
     except ValueError:
