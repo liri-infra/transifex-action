@@ -11,7 +11,7 @@ import tempfile
 
 
 def run(args):
-    print('+ ' + ' '.join(args))
+    print('+ ' + ' '.join(map(repr, args)))
     return subprocess.check_output(args)
 
 
