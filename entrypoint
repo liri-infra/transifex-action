@@ -12,7 +12,7 @@ import tempfile
 
 def run(args):
     print('+ ' + ' '.join(map(repr, args)))
-    return subprocess.check_output(args)
+    return subprocess.run(args, check=True)
 
 
 def main():
