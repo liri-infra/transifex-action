@@ -10,9 +10,9 @@ import subprocess
 import tempfile
 
 
-def run(args):
-    print('+ ' + ' '.join(map(repr, args)))
-    return subprocess.run(args, check=True)
+def run(cmd, *args):
+    print('+ ' + ' '.join(map(repr, cmd)))
+    return subprocess.run(cmd, *args)
 
 
 def main():
@@ -53,27 +53,30 @@ def main():
 
     # Git checkout action does a shallow clone. That prevents us to
     # access common history of branches
-    run(['git', 'fetch', '--unshallow'])
+    run(['git', 'fetch', '--unshallow'], check=True)
 
     # Push and pull
     if pull_translations:
         pull_args = ['tx', 'pull', '--no-interactive', '--force', '--all']
-        run(pull_args + args)
+        run(pull_args + args, check=True)
     if push_sources:
-        run(['tx', 'push', '--no-interactive', '--source'])
+        run(['tx', 'push', '--no-interactive', '--source'], check=True)
 
     # Add files
     paths = glob.glob(translations_folder, recursive=True)
     for path in paths:
-        run(['git', 'add', path])
+        run(['git', 'add', path], check=True)
 
     # Commit
-    if ssh_tempfile:
-        os.environ['GIT_SSH_COMMAND'] = f'ssh -i {ssh_tempfile} -o StrictHostKeyChecking=no'
-        run(['git', 'remote', 'set-url', '--push', 'origin', f'git@github.com:{github_repository}'])
-    msg = 'Automatic merge of Transifex translations\n\n[ci skip]'
-    run(['git', 'commit', '--message=' + msg])
-    run(['git', 'push'])
+    if run(['git', 'diff-index', '--quiet', 'HEAD']).returncode == 1:
+        if ssh_tempfile:
+            os.environ['GIT_SSH_COMMAND'] = f'ssh -i {ssh_tempfile} -o StrictHostKeyChecking=no'
+            run(['git', 'remote', 'set-url', '--push', 'origin', f'git@github.com:{github_repository}'], check=True)
+        msg = 'Automatic merge of Transifex translations\n\n[ci skip]'
+        run(['git', 'commit', '--message=' + msg], check=True)
+        run(['git', 'push'], check=True)
+    else:
+        print('Nothing to commit')
 
 
 if __name__ == '__main__':
