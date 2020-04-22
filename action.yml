@@ -4,7 +4,7 @@ author: 'plfiorini'
 
 runs:
   using: 'docker'
-  image: 'Dockefile'
+  image: 'Dockerfile'
 
 inputs:
   push_sources:
