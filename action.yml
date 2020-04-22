@@ -4,7 +4,7 @@ author: 'plfiorini'
 
 runs:
   using: 'docker'
-  image: 'docker://liridev/transifex-action'
+  image: 'Dockefile'
 
 inputs:
   push_sources:
