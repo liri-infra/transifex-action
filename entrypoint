@@ -7,12 +7,16 @@
 import glob
 import os
 import subprocess
+import shlex
 import tempfile
 
 
-def run(cmd, *args):
-    print('+ ' + ' '.join(map(repr, cmd)))
-    return subprocess.run(cmd, *args)
+def run(cmd, **kwargs):
+    out = []
+    for c in cmd:
+        out.append(shlex.quote(c))
+    print('+ ' + repr(' '.join(out))[1:-1])
+    return subprocess.run(cmd, **kwargs)
 
 
 def main():
