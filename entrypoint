@@ -71,8 +71,12 @@ def main():
     for path in paths:
         run(['git', 'add', path], check=True)
 
+    # Show staged changes (check=False otherwise it will raise an exception
+    # when there are no changes)
+    run(['git', 'diff', '--staged'])
+
     # Commit
-    if run(['git', 'diff-index', '--quiet', 'HEAD']).returncode == 1:
+    if run(['git', 'diff', '--staged', '--quiet']).returncode != 0:
         if ssh_tempfile:
             os.environ['GIT_SSH_COMMAND'] = f'ssh -i {ssh_tempfile} -o StrictHostKeyChecking=no'
             run(['git', 'remote', 'set-url', '--push', 'origin', f'git@github.com:{github_repository}'], check=True)
