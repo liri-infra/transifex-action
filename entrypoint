@@ -75,13 +75,14 @@ def main():
     # when there are no changes)
     run(['git', 'diff', '--staged'])
 
-    # Commit
+    # Commit (but stash non needed changes, for example sometimes .tx/config)
     if run(['git', 'diff', '--staged', '--quiet']).returncode != 0:
         if ssh_tempfile:
             os.environ['GIT_SSH_COMMAND'] = f'ssh -i {ssh_tempfile} -o StrictHostKeyChecking=no'
             run(['git', 'remote', 'set-url', '--push', 'origin', f'git@github.com:{github_repository}'], check=True)
         msg = 'Automatic merge of Transifex translations\n\n[ci skip]'
         run(['git', 'commit', '--message=' + msg], check=True)
+        run(['git', 'stash'])
         run(['git', 'push'], check=True)
     else:
         print('Nothing to commit')
